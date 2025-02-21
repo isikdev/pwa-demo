@@ -2,7 +2,7 @@
     "name": "PWA Demo",
     "short_name": "PWA",
     "description": "Демонстрационное PWA приложение",
-    "start_url": "/",
+    "start_url": "https://isikdev.github.io/pwa-demo/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#ff4081",
