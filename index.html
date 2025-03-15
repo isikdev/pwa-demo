@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0">
+        <title>PWA Demo</title>
+        <link rel="manifest" href="manifest.webmanifest">
+
+        <!-- Фавиконы для всех устройств -->
+        <link rel="icon" type="image/png" sizes="16x16"
+            href="images/icons/icon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32"
+            href="images/icons/icon-32x32.png">
+        <link rel="icon" type="image/png" sizes="48x48"
+            href="images/icons/icon-48x48.png">
+        <link rel="icon" type="image/png" sizes="96x96"
+            href="images/icons/icon-96x96.png">
+        <link rel="icon" type="image/png" sizes="192x192"
+            href="images/icons/icon-192x192.png">
+        <link rel="shortcut icon"
+            href="images/icons/icon-16x16.png"
+            type="image/x-icon">
+
+        <!-- Фавиконы для Windows -->
+        <meta name="msapplication-TileColor" content="#ff4081">
+        <meta name="msapplication-TileImage"
+            content="images/icons/icon-144x144.png">
+        <meta name="msapplication-square70x70logo"
+            content="images/icons/icon-72x72.png">
+        <meta name="msapplication-square150x150logo"
+            content="images/icons/icon-152x152.png">
+        <meta name="msapplication-wide310x150logo"
+            content="images/icons/icon-144x144.png">
+        <meta name="msapplication-square310x310logo"
+            content="images/icons/icon-192x192.png">
+        <meta name="msapplication-config" content="none">
+
+        <meta name="theme-color" content="#ff4081">
+
+        <!-- iOS PWA мета-теги -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="PWA Demo">
+
+        <!-- Запрещает iOS показывать адресную строку при открытии из Home Screen -->
+        <meta name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent">
+
+        <!-- Иконки для iOS -->
+        <link rel="apple-touch-icon"
+            href="images/icons/icon-180x180.png">
+        <link rel="apple-touch-icon" sizes="57x57"
+            href="images/icons/icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="60x60"
+            href="images/icons/icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="72x72"
+            href="images/icons/icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76"
+            href="images/icons/icon-96x96.png">
+        <link rel="apple-touch-icon" sizes="114x114"
+            href="images/icons/icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="120x120"
+            href="images/icons/icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="144x144"
+            href="images/icons/icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152"
+            href="images/icons/icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180"
+            href="images/icons/icon-180x180.png">
+        <link rel="apple-touch-icon" sizes="167x167"
+            href="images/icons/icon-167x167.png">
+
+        <!-- Стартовые экраны для различных устройств iOS -->
+        <link rel="apple-touch-startup-image"
+            href="images/icons/icon-512x512.png"
+            media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+        <link rel="apple-touch-startup-image"
+            href="images/icons/icon-512x512.png"
+            media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+        <link rel="apple-touch-startup-image"
+            href="images/icons/icon-512x512.png"
+            media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+        <link rel="apple-touch-startup-image"
+            href="images/icons/icon-512x512.png"
+            media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+        <link rel="apple-touch-startup-image"
+            href="images/icons/icon-512x512.png"
+            media="(min-device-width: 768px) and (max-device-width: 1024px)">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff4081;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .install-button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            margin: 0 auto;
+        }
+
+        .install-button:hover {
+            background-color: #f50057;
+        }
+
+        /* Стили для модального окна iOS */
+        .ios-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .ios-modal.active {
+            opacity: 1;
+        }
+
+        .ios-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .ios-modal.active .ios-modal-content {
+            transform: translateY(0);
+        }
+        
+        .ios-modal h2 {
+            color: #ff4081;
+            margin-bottom: 15px;
+        }
+
+        .ios-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s;
+        }
+
+        .ios-modal-close:hover {
+            color: #ff4081;
+        }
+
+        .ios-steps {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .ios-step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: fadeInStep 0.5s forwards;
+            will-change: opacity, transform;
+        }
+
+        @keyframes fadeInStep {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .ios-step:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .ios-step:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .ios-step:nth-child(5) {
+            animation-delay: 0.6s;
+        }
+
+        .step-number {
+            width: 25px;
+            height: 25px;
+            background-color: #ff4081;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .ios-arrow {
+            color: #ff4081;
+            font-size: 1.5rem;
+            margin: 10px 0;
+            text-align: center;
+            opacity: 0;
+            animation: pulse 2s infinite, fadeIn 0.5s forwards;
+            animation-delay: 0.3s;
+            will-change: opacity;
+            position: relative;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.8;
+                top: 0;
+            }
+            50% {
+                opacity: 1;
+                top: 5px;
+            }
+            100% {
+                opacity: 0.8;
+                top: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .share-icon {
+            display: inline-block;
+            margin-left: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4081;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        /* Стили для промо-установки PWA */
+        .pwa-install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            max-width: 90%;
+            width: 350px;
+            z-index: 100;
+            display: none;
+        }
+
+        .pwa-install-prompt-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            background-image: url('images/icons/icon-180x180.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .pwa-install-prompt-text {
+            flex-grow: 1;
+        }
+
+        .pwa-install-prompt-text h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .pwa-install-prompt-text p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pwa-install-button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        .pwa-install-prompt-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #999;
+            cursor: pointer;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>PWA Демо</h1>
+            <p>Это демонстрационное PWA приложение</p>
+            <button id="installButton" class="install-button"
+                type="button">Установить
+                приложение</button>
+        </div>
+
+        <!-- Компонент с предложением установки PWA -->
+        <div id="pwaInstallPrompt" class="pwa-install-prompt">
+            <div class="pwa-install-prompt-icon"></div>
+            <div class="pwa-install-prompt-text">
+                <h3>Установить приложение</h3>
+                <p>Это приложение доступно для установки на ваше устройство</p>
+            </div>
+            <button id="pwaInstallButton"
+                class="pwa-install-button" type="button">Установить</button>
+            <button class="pwa-install-prompt-close"
+                id="pwaPromptClose" type="button">&times;</button>
+        </div>
+
+        <!-- Модальное окно для iOS -->
+        <div id="iosModal" class="ios-modal">
+            <div class="ios-modal-content">
+                <button class="ios-modal-close"
+                    id="closeIosModal" type="button">&times;</button>
+                <h2>Установка на iOS</h2>
+                <p>Чтобы добавить приложение на главный экран:</p>
+
+                <div class="ios-steps">
+                    <div class="ios-step">
+                        <div class="step-number">1</div>
+                        <div>Нажмите на кнопку <span class="share-icon">⎙</span>
+                            внизу экрана</div>
+                    </div>
+
+                    <div class="ios-arrow">&#x2193;</div>
+
+                    <div class="ios-step">
+                        <div class="step-number">2</div>
+                        <div>Прокрутите меню и найдите "На экран «Домой»"</div>
+                    </div>
+
+                    <div class="ios-arrow">&#x2193;</div>
+
+                    <div class="ios-step">
+                        <div class="step-number">3</div>
+                        <div>Нажмите "Добавить" в правом верхнем углу</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+                    После установки вы сможете запускать приложение прямо с
+                    главного экрана!
+                </p>
+            </div>
+        </div>
+
+        <script>
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+        const iosModal = document.getElementById('iosModal');
+        const closeIosModal = document.getElementById('closeIosModal');
+        const pwaInstallPrompt = document.getElementById('pwaInstallPrompt');
+        const pwaInstallButton = document.getElementById('pwaInstallButton');
+        const pwaPromptClose = document.getElementById('pwaPromptClose');
+        
+        // Начально скрываем кнопку
+        installButton.style.display = 'none';
+
+        // Определение iOS устройства
+        const isIOS = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent) && !window.MSStream;
+        };
+
+        // Определение Safari на iOS
+        const isIOSSafari = () => {
+            return isIOS() && /safari/.test(window.navigator.userAgent.toLowerCase());
+        };
+
+        // Определяем, запущено ли приложение в режиме PWA
+        const isInStandaloneMode = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+        // Показываем кнопку установки только если приложение не запущено в режиме PWA
+        if (!isInStandaloneMode()) {
+            installButton.style.display = 'block';
+        }
+
+        // Для не-iOS устройств используем стандартный механизм с beforeinstallprompt
+        if (!isIOS()) {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Не вызываем preventDefault(), чтобы позволить браузеру показать нативный баннер
+                deferredPrompt = e;
+                installButton.style.display = 'block';
+                
+                // Показываем промо-окно установки
+                pwaInstallPrompt.style.display = 'flex';
+            });
+        }
+
+        // Для iOS показываем модальное окно с инструкциями
+        const showIOSModal = () => {
+            iosModal.style.display = 'flex';
+            // Небольшая задержка перед добавлением класса для запуска анимации
+            setTimeout(() => {
+                iosModal.classList.add('active');
+            }, 10);
+        };
+
+        // Закрытие модального окна
+        const hideIOSModal = () => {
+            iosModal.classList.remove('active');
+            // Ждем окончания анимации перед скрытием элемента
+            setTimeout(() => {
+                iosModal.style.display = 'none';
+            }, 300);
+        };
+
+        // Закрытие модального окна
+        closeIosModal.addEventListener('click', () => {
+            hideIOSModal();
+        });
+
+        // При клике за пределами модального окна - закрываем его
+        window.addEventListener('click', (e) => {
+            if (e.target === iosModal) {
+                hideIOSModal();
+            }
+        });
+
+        // Автоматически проверяем для iOS Safari и показываем кнопку установки
+        window.addEventListener('DOMContentLoaded', () => {
+            if (isIOS() && !isInStandaloneMode()) {
+                // Если это iOS Safari и приложение не запущено в режиме PWA
+                installButton.style.display = 'block';
+                
+                // Сохраняем флаг в localStorage, чтобы не показывать модальное окно при каждом посещении
+                const hasShownInstallPrompt = localStorage.getItem('hasShownInstallPrompt');
+                
+                // Показываем автоматически модальное окно только если оно не было показано ранее
+                if (!hasShownInstallPrompt) {
+                    // Даем небольшую задержку перед показом, чтобы пользователь успел увидеть основное содержимое
+                    setTimeout(() => {
+                        showIOSModal();
+                        localStorage.setItem('hasShownInstallPrompt', 'true');
+                    }, 2000);
+                }
+            }
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Вызываем prompt() для показа диалога установки
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                if (result.outcome === 'accepted') {
+                    console.log('Пользователь установил приложение');
+                    installButton.style.display = 'none';
+                    pwaInstallPrompt.style.display = 'none';
+                }
+                deferredPrompt = null;
+            } else if (isIOS()) {
+                showIOSModal();
+            }
+        });
+
+        // Обработчик для кнопки установки в промо-окне
+        pwaInstallButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                if (result.outcome === 'accepted') {
+                    console.log('Пользователь установил приложение');
+                    installButton.style.display = 'none';
+                    pwaInstallPrompt.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // Закрытие промо-окна установки
+        pwaPromptClose.addEventListener('click', () => {
+            pwaInstallPrompt.style.display = 'none';
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => console.log('ServiceWorker зарегистрирован'))
+                .catch(err => console.log('Ошибка регистрации ServiceWorker:', err));
+        }
+    </script>
+    </body>
+</html>
